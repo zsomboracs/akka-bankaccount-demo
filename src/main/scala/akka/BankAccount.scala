@@ -22,6 +22,12 @@ object BankAccount {
 
   case object Failed
 
+  case object Deactivate
+
+  case object Activate
+
+  case object Deactivated
+
 }
 
 class BankAccount extends Actor {
@@ -35,7 +41,6 @@ class BankAccount extends Actor {
     case GetBalance => sender ! Balance(balance)
 
     case Deposit(amount) =>
-      println(s"deposit received $amount")
       balance += amount
       sender ! Done
 
@@ -43,7 +48,14 @@ class BankAccount extends Actor {
       balance -= amount
       sender ! Done
 
+    case Deactivate => context.become(deactivated)
+
     case _ => sender ! Failed
+  }
+
+  def deactivated = LoggingReceive {
+    case Activate => context.unbecome()
+    case _ => sender ! Deactivated
   }
 
 }

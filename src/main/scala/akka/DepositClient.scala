@@ -1,17 +1,19 @@
 package akka
 
-import BankAccount.{Balance, Deposit, Done, GetBalance}
+import akka.BankAccount.Deposit
 import akka.actor.{Actor, ActorRef}
 import akka.event.LoggingReceive
 
+import scala.concurrent.duration._
+
 class DepositClient(bankAccount: ActorRef, amount: Integer) extends Actor {
 
-  println(s"deposit sent $amount")
-  bankAccount ! Deposit(amount)
+  import context.dispatcher
+
+  context.system.scheduler.schedule(0 seconds, 2 seconds, bankAccount, Deposit(amount))
 
   def receive = LoggingReceive {
-    case Done => bankAccount ! GetBalance
-    case Balance(balance) => context.stop(self)
+    case _ =>
   }
 
 }
