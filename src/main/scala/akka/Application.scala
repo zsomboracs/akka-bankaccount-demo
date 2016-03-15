@@ -1,6 +1,5 @@
 package akka
 
-import BankAccount.BankAccount
 import akka.actor.{ActorSystem, Props}
 
 

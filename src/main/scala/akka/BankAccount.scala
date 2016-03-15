@@ -1,4 +1,4 @@
-package BankAccount
+package akka
 
 import akka.actor.Actor
 import akka.event.LoggingReceive

@@ -1,6 +1,5 @@
 package akka
 
-import BankAccount.BankAccount
 import BankAccount.{Balance, Deposit, Done, GetBalance}
 import akka.actor.{Actor, ActorRef}
 import akka.event.LoggingReceive
