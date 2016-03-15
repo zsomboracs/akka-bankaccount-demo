@@ -35,6 +35,7 @@ class BankAccount extends Actor {
     case GetBalance => sender ! Balance(balance)
 
     case Deposit(amount) =>
+      println(s"deposit received $amount")
       balance += amount
       sender ! Done
 
