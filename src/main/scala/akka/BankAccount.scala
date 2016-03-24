@@ -1,7 +1,6 @@
 package akka
 
 import akka.actor.Actor
-import akka.event.LoggingReceive
 
 
 object BankAccount {
@@ -22,12 +21,6 @@ object BankAccount {
 
   case object Failed
 
-  case object Deactivate
-
-  case object Activate
-
-  case object Deactivated
-
 }
 
 class BankAccount extends Actor {
@@ -36,7 +29,7 @@ class BankAccount extends Actor {
 
   var balance = 0
 
-  def receive = LoggingReceive {
+  def receive() : Receive = {
 
     case GetBalance => sender ! Balance(balance)
 
@@ -48,14 +41,7 @@ class BankAccount extends Actor {
       balance -= amount
       sender ! Done
 
-    case Deactivate => context.become(deactivated)
-
     case _ => sender ! Failed
-  }
-
-  def deactivated = LoggingReceive {
-    case Activate => context.unbecome()
-    case _ => sender ! Deactivated
   }
 
 }
