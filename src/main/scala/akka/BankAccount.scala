@@ -23,9 +23,12 @@ object BankAccount {
 
 }
 
-class BankAccount extends Actor {
+class BankAccount(email: String) extends Actor {
 
   import BankAccount._
+  import Advertiser._
+
+  val advertiserMaster = context.actorSelection("akka://BankAccountActorSystem/user/client/advertiserMaster")
 
   var balance = 0
 
@@ -38,7 +41,9 @@ class BankAccount extends Actor {
       sender ! Done
 
     case Withdraw(amount) if amount <= balance =>
+      println(s"withdraw: $email - $amount")
       balance -= amount
+      advertiserMaster ! new Advertise(email, amount)
       sender ! Done
 
     case _ => sender ! Failed
